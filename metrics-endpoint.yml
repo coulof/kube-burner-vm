@@ -1,0 +1,6 @@
+- endpoint: {{ .PROM }}
+  token: {{.PROM_TOKEN}}
+  metrics:
+    - kubevirt-metrics.yaml
+  indexer:
+    type: local
