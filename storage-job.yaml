@@ -1,0 +1,53 @@
+metricsEndpoints:
+  - endpoint: {{ .PROM }}
+    token: {{.PROM_TOKEN}}
+    indexer:
+      type: local
+  - indexer:
+      type: local
+      metricsDirectory: /var/tmp/kube-burner
+
+global:
+  measurements:
+  - name: podLatency
+
+jobs:
+  - name: sts-density
+    jobType: create
+    jobIterations: {{.ITERATIONS}}
+    namespacedIterations: true
+    namespace: pvc-density
+    qps: {{.QPS}}
+    burst: {{.BURST}}
+    maxWaitTimeout: 30m
+    jobPause: 2m
+ 
+    objects:
+      - kind: StatefulSet
+        apiVersion: apps/v1
+        template: templates/statefulset-template.yaml
+    waitForCreation: true
+
+  - name: statefulset-delete
+    jobType: delete
+    qps: {{.QPS}}
+    burst: {{.BURST}}
+    jobPause: 1m
+    objects:
+      - kind: StatefulSet
+        apiVersion: apps/v1
+        labelSelector: {kube-burner-job: sts-density}
+    waitForDeletion: true
+
+  - name: statefulset-churn
+    jobIterations: {{.ITERATIONS}}
+    namespacedIterations: true
+    namespace: pvc-churning
+    churn: true
+    churnPercent: 20
+    churnDuration: 1h
+    churnDelay: 0s
+    objects:
+      - kind: StatefulSet
+        apiVersion: apps/v1
+        template: template/statefulset-template.yaml

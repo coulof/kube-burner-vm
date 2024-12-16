@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .name }}
+spec:
+  serviceName: {{ .name }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+      - name: test
+        image: ghcr.io/coulof/fio:latest
+        imagePullPolicy: IfNotPresent
+        command: [ "/bin/sleep", "3600" ]
+        volumeMounts:
+        - mountPath: "/data"
+          name: pvolx-0
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+  volumeClaimTemplates:
+  - metadata:
+      name: pvolx-0
+    spec:
+      volumeMode: Filesystem
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .storageClass }}
+      resources:
+        requests:
+          storage: 1Gi
+
