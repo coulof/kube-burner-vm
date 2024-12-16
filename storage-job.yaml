@@ -23,6 +23,7 @@ jobs:
     jobPause: 1m
     objects:
       - objectTemplate: template/sts.yaml
+        replicas: {{.OBJ_REPLICAS}}
         inputVars:
           storageClass: powerstore
 
@@ -46,5 +47,6 @@ jobs:
     churnDelay: 0s
     objects:
       - objectTemplate: template/sts.yaml
+        replicas: {{.OBJ_REPLICAS}}
         inputVars:
           storageClass: powerstore
