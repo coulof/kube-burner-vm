@@ -20,13 +20,11 @@ jobs:
     qps: {{.QPS}}
     burst: {{.BURST}}
     maxWaitTimeout: 30m
-    jobPause: 2m
- 
+    jobPause: 1m
     objects:
-      - kind: StatefulSet
-        apiVersion: apps/v1
-        template: templates/statefulset-template.yaml
-    waitForCreation: true
+      - objectTemplate: template/sts.yaml
+        inputVars:
+          storageClass: powerstore
 
   - name: statefulset-delete
     jobType: delete
@@ -37,7 +35,6 @@ jobs:
       - kind: StatefulSet
         apiVersion: apps/v1
         labelSelector: {kube-burner-job: sts-density}
-    waitForDeletion: true
 
   - name: statefulset-churn
     jobIterations: {{.ITERATIONS}}
@@ -48,6 +45,6 @@ jobs:
     churnDuration: 1h
     churnDelay: 0s
     objects:
-      - kind: StatefulSet
-        apiVersion: apps/v1
-        template: template/statefulset-template.yaml
+      - objectTemplate: template/sts.yaml
+        inputVars:
+          storageClass: powerstore
