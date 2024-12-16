@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .name }}
+  name: fio-sleep-{{.Iteration}}-{{.Replica}}
 spec:
-  serviceName: {{ .name }}
+  serviceName: fio-sleep-{{.Iteration}}-{{.Replica}}
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .name }}
+      app: fio-sleep-{{.Iteration}}-{{.Replica}}
   template:
     metadata:
       labels:
-        app: {{ .name }}
+        app: fio-sleep-{{.Iteration}}-{{.Replica}}
     spec:
       containers:
       - name: test

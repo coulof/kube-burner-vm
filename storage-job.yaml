@@ -22,7 +22,7 @@ jobs:
     maxWaitTimeout: 30m
     jobPause: 1m
     objects:
-      - objectTemplate: template/sts.yaml
+      - objectTemplate: templates/sts.yaml
         replicas: {{.OBJ_REPLICAS}}
         inputVars:
           storageClass: powerstore
@@ -46,7 +46,7 @@ jobs:
     churnDuration: 1h
     churnDelay: 0s
     objects:
-      - objectTemplate: template/sts.yaml
+      - objectTemplate: templates/sts.yaml
         replicas: {{.OBJ_REPLICAS}}
         inputVars:
           storageClass: powerstore
