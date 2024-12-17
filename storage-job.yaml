@@ -26,6 +26,7 @@ jobs:
         replicas: {{.OBJ_REPLICAS}}
         inputVars:
           storageClass: powerstore
+          nodename: ocp04-hfxzk-worker-0-kwb56
 
   - name: statefulset-delete
     jobType: delete
