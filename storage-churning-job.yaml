@@ -12,27 +12,18 @@ global:
   - name: podLatency
 
 jobs:
-  - name: sts-density
-    jobType: create
+  - name: statefulset-churn
     jobIterations: {{.ITERATIONS}}
     namespacedIterations: true
-    namespace: pvc-density
+    namespace: pvc-churning
     qps: {{.QPS}}
     burst: {{.BURST}}
-    maxWaitTimeout: 30m
-    jobPause: 1m
+    churn: true
+    churnPercent: 20
+    churnDuration: 1h
+    churnDelay: 0s
     objects:
       - objectTemplate: templates/sts.yaml
         replicas: {{.OBJ_REPLICAS}}
         inputVars:
           storageClass: powerstore
-
-  - name: statefulset-delete
-    jobType: delete
-    qps: {{.QPS}}
-    burst: {{.BURST}}
-    jobPause: 1m
-    objects:
-      - kind: StatefulSet
-        apiVersion: apps/v1
-        labelSelector: {kube-burner-job: sts-density}

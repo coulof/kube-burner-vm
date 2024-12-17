@@ -13,6 +13,9 @@ spec:
       labels:
         app: fio-sleep-{{.Iteration}}-{{.Replica}}
     spec:
+{{- if .nodename }}
+      nodeName: {{.nodename}}
+{{- end }}
       containers:
       - name: test
         image: ghcr.io/coulof/fio:latest
